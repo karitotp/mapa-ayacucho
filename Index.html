@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Load GeoJSON</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.8/mapbox.js'></script>
+<script src='place_of_worship.geojson'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.8/mapbox.css' rel='stylesheet' />
+<style>
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+</style>
+</head>
+<body>
+
+
+<div id='map'></div>
+<script>
+L.mapbox.accessToken = 'pk.eyJ1Ijoia2FyaXRvdHAiLCJhIjoib0ppeVhnWSJ9.JOLM9BQLqtI_bjvNzjNPew';
+
+
+
+for (var i = 0; i < church.features.length; i++) {
+    church.features[i].properties["title"]= church.features[i].properties.name;
+
+    if(church.features[i].geometry.type === "LineString"){
+      church.features[i].geometry.type ="Point";
+       church.features[i].geometry.coordinates = church.features[i].geometry.coordinates[0];
+
+}
+
+    church.features[i].properties["marker-color"]= "#049cdb";
+    church.features[i].properties["marker-symbol"]= "religious-christian";
+     //church.features[i].properties["description"]= "catholic";
+    //church.features[i].properties["description"] = '<img width="200px" src="http://www.unique-southamerica-travel-experience.com/images/iglesia-santo-domingo-copia.jpg"></img>';
+
+     //if (church.features[i].properties.name==="Capilla Señor de los Milagros") {
+
+      church.features[i].properties["description"] = '<img width="200px" src="'+church.features[i].properties.image +'"></img>';
+      
+     //};
+
+}
+
+L.mapbox.map('map', 'examples.map-i86nkdio')
+  .setView([-13.5, -74.2], 10)
+  .featureLayer.setGeoJSON(church);
+
+
+</script>
+
+
+</body>
+</html>
